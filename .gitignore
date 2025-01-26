@@ -38,3 +38,4 @@ coverage/
 # Temporary files
 *.tmp
 *.temp
+src/test.js

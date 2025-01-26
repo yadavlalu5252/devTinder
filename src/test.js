@@ -57,8 +57,35 @@ app.get("/user", (req, res) => {
   res.send({firstName: "lalu", lastName: "yadav"});
 });
 
+// We can have a multiple request handler inside route
+app.use("/user", 
+  (req, res, next) => {
+    console.log("1st response");
+    // res.send("Handling the route user 1");
+    next();
+},
+(req, res, next) => {
+  console.log("2nd Response")
+  res.send("second Resposne")
+  // next();
+}
+)
 
 
 app.listen(3000, () => {
   console.log("app listen at 3000...");
 });
+
+
+/* Handle Auth middleware for all GET, POST, DELETE... request */
+const {adminAuth} = require("./middlewares/auth")
+app.use("/admin", adminAuth);
+
+app.get("/admin/getAllData", (req,res) => {
+  console.log("first");
+  res.send("All data fetched Succussfully!");
+})
+
+app.get("/admin/deleteAllData", (req, res) => {
+  res.send("Deleted Succussfully")
+})
