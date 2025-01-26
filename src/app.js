@@ -22,21 +22,39 @@ const app = express();
 //     // if we run route /hello/2 then also /hello will run
 // })
 
-app.use("/user", (req,res) => {
-  res.send("I am the king")
-})
+// app.use("/user", (req,res) => {
+//   res.send("I am the king")
+// })
 
 app.post("/user", (req, res) => {
   res.send("app is sending post request");
 });
 
 app.get("/user", (req, res) => {
+  console.log(req.query)
   res.send({firstName: "lalu", lastName: "yadav"});
 });
 
 app.delete("/user", (req, res) => {
   res.send("deleted succussfully!!");
 });
+
+app.get("/ab+c", (req, res) => {
+  res.send("We are experimenting!! ")
+})
+
+
+// Dynamic Routing -- params
+app.get("/user/:userId/:username", (req, res) => {
+  console.log(req.params)
+  const {userId, username} = req.params;
+  console.log(userId)
+  console.log(username)
+  res.send("hii")
+})
+
+
+
 
 app.listen(3000, () => {
   console.log("app listen at 3000...");
