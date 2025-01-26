@@ -46,7 +46,20 @@ app.use("/user", (req, res, next) => {
   })
  */
 
-  
+
+
+  // Error handling
+/*   app.get("/admin/getAllData", (req,res) => {
+
+    throw new Error("tujhe error aaya hai! handle kr")
+    res.send("All data fetched Succussfully!");
+  })
+  app.use("/", (err, req, res, next) => {
+    if(err){
+      res.status(500).send("something went wrong")
+    }
+  }) */
+
 app.listen(3000, () => {
   console.log("app listen at 3000...");
 });

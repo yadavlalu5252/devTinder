@@ -89,3 +89,15 @@ app.get("/admin/getAllData", (req,res) => {
 app.get("/admin/deleteAllData", (req, res) => {
   res.send("Deleted Succussfully")
 })
+
+  // Error handling
+  app.get("/admin/getAllData", (req,res) => {
+
+    throw new Error("tujhe error aaya hai! handle kr")
+    res.send("All data fetched Succussfully!");
+  })
+  app.use("/", (err, req, res, next) => {
+    if(err){
+      res.status(500).send("something went wrong")
+    }
+  })
