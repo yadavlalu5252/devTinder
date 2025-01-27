@@ -183,8 +183,6 @@ app.post("/signup", async (req, res) => {
     }
   });
 
-
- 
   try {
     user.save();
     res.send("User Created Succussfully!");
@@ -193,8 +191,21 @@ app.post("/signup", async (req, res) => {
   }
 });
 
+// Update data of the user
+app.patch("/user", async (req, res) => {
+  const userId = req.body._id;
+  const data = req.body;
+  try {
+    const updatedUser = await User.findByIdAndUpdate(userId, data, {
+      returnDocument: "after",
+    });
+    res.send(updatedUser);
+  } catch (error) {
+    res.status(400).send("User not found");
+  }
+});
 
- // DB connection and app listen
+// DB connection and app listen
 connectDB()
   .then(() => {
     console.log("Database Connection Established...");
