@@ -11,7 +11,9 @@
     "start": "node src/app.js"
   },
   "dependencies": {
+    "bcrypt": "^5.1.1",
     "express": "^4.21.2",
-    "mongoose": "^8.9.5"
+    "mongoose": "^8.9.5",
+    "validator": "^13.12.0"
   }
 }
