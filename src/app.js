@@ -4,10 +4,18 @@ const connectDB = require("./config/database");
 const User = require("./models/user");
 const { validateSignUpData } = require("./utils/validation");
 const bcrypt = require("bcrypt");
+const cookieParser = require("cookie-parser");
+const jwt = require("jsonwebtoken");
+
+
+//middlewares
+app.use(express.json());
+app.use(cookieParser());
+
 
 // Make your signup API dynamic to receive data from the end user(postman or browser)
 // acts as a middleware and reads the json object coming from req.body and converts it into js object
-app.use(express.json());
+// app.use(express.json());
 
 app.post("/signup", async (req, res) => {
   try {
@@ -45,9 +53,17 @@ app.post("/login", async (req, res) => {
     if (!user) {
       throw new Error("Invalid Credientials");
     }
+    
     const isValidPassword = await bcrypt.compare(password, user.password);
 
     if (isValidPassword) {
+
+      // create jwt token
+      const token = await jwt.sign({_id: user._id}, "Lalu@357")
+      // console.log(token)
+
+      // add the token to cookie and send the response back to the user
+      res.cookie("token", token)
       res.send("Login Successful!");
     } else {
       throw new Error("Invalid Credientials");
@@ -56,6 +72,38 @@ app.post("/login", async (req, res) => {
     res.status(400).send("Error: " + error.message);
   }
 });
+
+
+// get profile
+app.get("/profile", async(req, res) => {
+ try {
+  const cookies = req.cookies;
+  const {token} = cookies;
+  if(!token){
+    throw new Error("Invalid Token!")
+  }
+
+  //validate user
+  const decodedMessage = await jwt.verify(token, "Lalu@357");
+  const {_id} = decodedMessage;
+  // console.log("id is: "+_id);
+  const user = await User.findById(_id);
+
+  if(!user){
+    throw new Error("User not found!")
+  }
+  res.send(user);  
+ }
+  catch (error) {
+  // throw new Error("Error while fetching Profile: "+ error.message)
+  /* agar uper jaisa krenge to terminal pe error aayega */
+  res.status(400).send("Error: "+error.message)
+ }
+
+})
+
+
+
 
 // get a user
 app.get("/user", async (req, res) => {
