@@ -6,11 +6,6 @@ const User = require("../models/user");
 const { validateSignUpData } = require("../utils/validation");
 
 
-
-
-// Make your signup API dynamic to receive data from the end user(postman or browser)
-// acts as a middleware and reads the json object coming from req.body and converts it into js object
-// app.use(express.json());
 authRouter.post("/signup", async (req, res) => {
   try {
     //validation of data
@@ -65,7 +60,14 @@ authRouter.post("/login", async (req, res) => {
   }
 });
 
+// logout
+authRouter.post("/logout", async(req, res) => {
+      res.cookie("token", null, {
+        expires: new Date(Date.now()),
+      });
+      res.send("logout Successful!");
 
+})
 
 
 module.exports = authRouter;
