@@ -115,6 +115,13 @@ app.post("/signup", async (req, res) => {
     age: "26",
     gender: "male",
   });
+  try {
+    user.save();
+    res.send("User Created Succussfully!");
+  } catch (error) {
+    res.status(400).send("bad request!!");
+  }
+});
 
   // Make your signup API dynamic to receive data from the end user(postman or browser)
   app.use(express.json());
@@ -183,13 +190,7 @@ app.post("/signup", async (req, res) => {
     }
   });
 
-  try {
-    user.save();
-    res.send("User Created Succussfully!");
-  } catch (error) {
-    res.status(400).send("bad request!!");
-  }
-});
+
 
 // Update data of the user
 app.patch("/user", async (req, res) => {
