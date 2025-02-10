@@ -23,7 +23,10 @@ authRouter.post("/signup", async (req, res) => {
       age,
     });
     await user.save();
-    res.send("User Created Succussfully!");
+    res.json({
+      message: "User Created Succussfully!",
+      data: user
+    });
   } catch (error) {
     res.status(400).send("User not Created: " + error.message);
   }
@@ -49,9 +52,12 @@ authRouter.post("/login", async (req, res) => {
       const token = await user.getJWT();
 
       res.cookie("token", token, {
-        expires: new Date(Date.now() + 1 * 36000),
+        expires: new Date(Date.now() + 1 * 360000),
       });
-      res.send("Login Successful!");
+      res.json({
+        message: "Login Successful!",
+        data: user
+      });
     } else {
       throw new Error("Invalid Credientials");
     }
@@ -65,7 +71,9 @@ authRouter.post("/logout", async(req, res) => {
       res.cookie("token", null, {
         expires: new Date(Date.now()),
       });
-      res.send("logout Successful!");
+      res.json({
+        message: "logout Successful!"
+      });
 
 })
 
