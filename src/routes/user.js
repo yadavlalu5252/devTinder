@@ -1,7 +1,8 @@
 const express = require("express");
 const userRouter = express.Router();
 const {userAuth} = require("../middlewares/auth");
-const ConnectionRequest = require("../models/connectionRequest")
+const ConnectionRequest = require("../models/connectionRequest");
+const User = require("../models/user");
 
 
 const USER_SAFE_DATA = "firstName lastName photoUrl age gender about skills";
@@ -49,6 +50,57 @@ userRouter.get("/user/connections", userAuth, async(req, res) => {
         })
     } catch (error) {
         res.status(400).send("Error: "+error.message);        
+    }
+})
+
+
+userRouter.get("/feed", userAuth, async(req, res) => {
+    try {
+        
+        // Pagination
+        const page = parseInt(req.query.page) || 1;
+        let limit = parseInt(req.query.limit) || 10;
+        limit = limit > 50 ? 50 : limit;
+        const skip = (page - 1)*limit;
+
+        /* User should get all the user except
+        1. his own card
+        2. his connections
+        3. ignored people
+        4. already sent the connection request
+        */
+       
+        const loggedInUser = req.user;
+        const connectionRequests = await ConnectionRequest.find({
+            $or: [{fromUserId: loggedInUser._id},{toUserId: loggedInUser._id}]
+            // connection between a to b or b to a
+        }).select("fromUserId toUserId")
+        // .populate("fromUserId", "firstName")
+        // .populate("toUserId", "firstName");
+
+
+        // block all the connection requests are present
+        const hideUserFromFeed = new Set(); // use set ds because duplicate value na aaye
+        connectionRequests.forEach((req) => {
+            hideUserFromFeed.add(req.fromUserId.toString());
+             // connection req ke fromUserId and toUserId ko set ds mai add kr denge
+            hideUserFromFeed.add(req.toUserId.toString());
+        });
+
+        const users = await User.find({
+            $and:[
+                {_id: {$nin: Array.from(hideUserFromFeed)}}, // find all user who not present in
+                {_id: {$ne: loggedInUser._id}}, // not want my own card also
+            ]
+        }).select(USER_SAFE_DATA).skip(skip).limit(limit);
+
+        res.json({
+            message: "Your feed Fetched Successfully!!",
+            data: users,
+        });
+
+    } catch (error) {
+        res.status(400).json({message: error.message})
     }
 })
 

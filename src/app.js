@@ -1,7 +1,13 @@
 const express = require("express");
 const app = express();
 const connectDB = require("./config/database");
-require('dotenv').config()
+require('dotenv').config();
+
+const cors = require("cors");
+app.use(cors({
+  origin:"http://localhost:5173", // whitelisting this network 
+  credentials: true
+}));
 
 const cookieParser = require("cookie-parser");
 
@@ -21,10 +27,6 @@ app.use("/",requestRouter);
 app.use("/",userRouter);
 
 
-
-
-
-
 // DB connection
 connectDB()
   .then(() => {
@@ -34,5 +36,5 @@ connectDB()
     });
   })
   .catch((err) => {
-    console.log("Database connection failed");
+    console.log("Database connection failed"+err.message);
   });
