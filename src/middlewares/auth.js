@@ -17,7 +17,7 @@ const userAuth = async(req, res, next) => {
   try {
     const {token} = req.cookies;
     if(!token){
-      throw new Error("Token not Found!!!")
+      return res.status(401).send("You are not loggedIn, Please Login!");
     };
 
     const decodedObj = await jwt.verify(token, process.env.JWT_SECRET_KEY);

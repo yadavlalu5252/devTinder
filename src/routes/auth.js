@@ -12,7 +12,7 @@ authRouter.post("/signup", async (req, res) => {
     validateSignUpData(req);
 
     // Encrpt the password
-    const { emailId, password, firstName, lastName, age } = req.body;
+    const { emailId, password, firstName, lastName } = req.body;
     const passwordHash = await bcrypt.hash(password, 10);
 
     const user = new User({
@@ -20,13 +20,18 @@ authRouter.post("/signup", async (req, res) => {
       lastName,
       emailId,
       password: passwordHash,
-      age,
     });
-    await user.save();
-    res.json({
-      message: "User Created Succussfully!",
-      data: user
+
+    const savedUser = await user.save();
+    const token = await savedUser.getJWT();
+
+    res.cookie("token", token, {
+      expires: new Date(Date.now() + 8 * 3600000),
     });
+
+
+
+    res.json({ message: "User Added successfully!", data: savedUser });
   } catch (error) {
     res.status(400).send("User not Created: " + error.message);
   }
@@ -54,10 +59,7 @@ authRouter.post("/login", async (req, res) => {
       res.cookie("token", token, {
         expires: new Date(Date.now() + 100 * 360000),
       });
-      res.json({
-        message: "Login Successful!",
-        data: user
-      });
+      res.send(user)
     } else {
       throw new Error("Invalid Credientials");
     }

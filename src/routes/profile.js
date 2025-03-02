@@ -10,10 +10,7 @@ const { validateEditProfileData } = require("../utils/validation");
 profileRouter.get("/profile/view", userAuth, async (req, res) => {
     try {
       const user = req.user;
-      res.json({
-        message: "Profile fetched Successfully!",
-        data: user
-      });
+      res.send(user)
     } catch (error) {
       res.status(400).send("Error: " + error.message);
     }
@@ -35,9 +32,9 @@ profileRouter.get("/profile/view", userAuth, async (req, res) => {
       await loggedInUser.save();
       
       res.json({
-        message: `${loggedInUser.firstName},Profile Updated Succussfully!!`,
-        data: loggedInUser
-        });
+        message: `${loggedInUser.firstName}, your profile updated successfuly`,
+        data: loggedInUser,
+      });
       
     } catch (error) {
       res.status(400).send("Error: " + error.message);

@@ -94,10 +94,7 @@ userRouter.get("/feed", userAuth, async(req, res) => {
             ]
         }).select(USER_SAFE_DATA).skip(skip).limit(limit);
 
-        res.json({
-            message: "Your feed Fetched Successfully!!",
-            data: users,
-        });
+        res.json({ data: users });
 
     } catch (error) {
         res.status(400).json({message: error.message})
