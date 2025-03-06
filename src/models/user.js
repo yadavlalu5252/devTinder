@@ -57,6 +57,13 @@ const userSchema = new mongoose.Schema(
         }
       }
     },
+    isPremium: {
+      type: Boolean,
+      default: false,
+    },
+    membershipType: {
+      type: String,
+    },
 
     about: {
       type: String,
@@ -75,7 +82,7 @@ const userSchema = new mongoose.Schema(
           throw new Error("Your Photo Url is not Correct"+ value)
         }
       }
-    }
+    },
   },
   
   {
