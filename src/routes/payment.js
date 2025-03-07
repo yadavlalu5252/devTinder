@@ -39,7 +39,8 @@ paymentRouter.post("/payment/create", userAuth, async(req,res)=> {
 
         const savedPayment = await payment.save();
         // return back my order details to frontend
-        res.json({...savedPayment.toJSON(), keyId: process.env.RAZORPAY_KEY_ID})
+        // res.json({...savedPayment.toJSON(), keyId: process.env.RAZORPAY_KEY_ID})
+        res.json({...savedPayment.toJSON(), keyId: "rzp_test_vpohMzApOKFdb8"})
 
     } catch (error) {
         return res.status(500).json({msg: error.message})
@@ -52,7 +53,8 @@ paymentRouter.post("/payment/webhook", async(req, res) => {
         const isWebhookValid = validateWebhookSignature(
             JSON.stringify(req.body),
             webhookSignature,
-            process.env.RAZORPAY_WEBHOOK_SECRET
+            "Lalu@357"
+            // process.env.RAZORPAY_WEBHOOK_SECRET
         );
 
         // If unwanted webhook comes then not valid

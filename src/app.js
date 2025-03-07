@@ -33,7 +33,7 @@ app.use("/",paymentRouter)
 connectDB()
   .then(() => {
     console.log("Database Connection Established...");
-    app.listen(process.env.PORT, () => {
+    app.listen(7777, () => {
       console.log("app listen at 7777...");
     });
   })
