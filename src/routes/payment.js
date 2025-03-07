@@ -47,6 +47,7 @@ paymentRouter.post("/payment/create", userAuth, async(req,res)=> {
     }
 });
 
+
 paymentRouter.post("/payment/webhook", async(req, res) => {
     try {
         const webhookSignature = req.get("X-Razorpay-Signature");
@@ -79,9 +80,24 @@ paymentRouter.post("/payment/webhook", async(req, res) => {
 
 
     } catch (error) {
-        return res.status(500).json({msg: error.message})
+        return res.status(500).json({msg: error.message});
     }
 })
+
+paymentRouter.get("/premium/verify", userAuth, async(req, res)=> {
+    try {
+        const user = req.user.toJSON();
+        if(user.isPremium){
+            return res.json({...user});
+        }
+        else{
+            return res.json({...user});
+        }
+    } catch (error) {
+        return res.status(500).json({msg: error.message});
+    }
+})
+
 
 
 
