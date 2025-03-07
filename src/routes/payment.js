@@ -20,9 +20,9 @@ paymentRouter.post("/payment/create", userAuth, async(req,res)=> {
                 firstName,
                 lastName,
                 emailId,
-                membershipType
-            }
-        })
+                membershipType:membershipType,
+            },
+        });
 
 
         // save it in db
@@ -34,7 +34,7 @@ paymentRouter.post("/payment/create", userAuth, async(req,res)=> {
             currency: order.currency,
             receipt: order.receipt,
             notes: order.notes,
-        })
+        });
 
 
         const savedPayment = await payment.save();
@@ -65,7 +65,7 @@ paymentRouter.post("/payment/webhook", async(req, res) => {
 
         const payment = await Payment.findOne({orderId: paymentDetails.order_id});
         payment.status = paymentDetails.status;
-        payment.save();
+        await payment.save();
 
         const user = await User.findOne({_id: payment.userId});
         user.isPremium = true,
