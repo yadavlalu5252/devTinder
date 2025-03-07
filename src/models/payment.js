@@ -29,6 +29,7 @@ const paymentSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+       
     notes: {
         firstName: {
             type: String,
@@ -38,7 +39,6 @@ const paymentSchema = new mongoose.Schema({
         },
         membershipType: {
             type: String,
-            required: true,
         },
     },
 },{timestamps: true});
