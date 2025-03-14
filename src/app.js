@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const connectDB = require("./config/database");
-// require("dotenv").config()
+const http = require("http");
 
 const cors = require("cors");
 app.use(cors({
@@ -21,19 +21,27 @@ const profileRouter = require("./routes/profile");
 const requestRouter = require("./routes/requests");
 const userRouter = require("./routes/user");
 const paymentRouter = require("./routes/payment");
+const initializeSocket = require("./utils/socket");
+const chatRouter = require("./routes/chat");
 
 app.use("/",authRouter);
 app.use("/",profileRouter);
 app.use("/",requestRouter);
 app.use("/",userRouter);
-app.use("/",paymentRouter)
+app.use("/",paymentRouter);
+app.use("/",chatRouter);
+
+
+const server = http.createServer(app);
+initializeSocket(server);
+
 
 
 // DB connection
 connectDB()
   .then(() => {
     console.log("Database Connection Established...");
-    app.listen(7777, () => {
+    server.listen(7777, () => {
       console.log("app listen at 7777...");
     });
   })
