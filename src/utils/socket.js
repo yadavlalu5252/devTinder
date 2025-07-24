@@ -19,12 +19,12 @@ const initializeSocket = (server) => {
   });
 
   io.on("connection", (socket) => {
+    
     // Handle Events
-
     socket.on("joinChat", ({ firstName, userId, targetUserId }) => {
       // const roomId = [userId, targetUserId].sort().join("-");
       const roomId = getSecretRoomId(userId, targetUserId);
-      // console.log(firstName + " Room id is: " + roomId);
+      ;
       socket.join(roomId);
 
     });
@@ -32,12 +32,11 @@ const initializeSocket = (server) => {
 
     socket.on("sendMessage",
       async ({ firstName, lastName, userId, targetUserId, text }) => {
-        
+
         // Save messages to Database
         try {
           const roomId = getSecretRoomId(userId, targetUserId);
-          // console.log(firstName+ " "+ text);
-          
+
           let chat = await Chat.findOne({
             participants: { $all: [userId, targetUserId] }
           });
@@ -60,13 +59,13 @@ const initializeSocket = (server) => {
             firstName,
             lastName,
             text,
-            timeStamp: new Date()
+            timeStamp: new Date(),
           }) // emit means server is sending message
 
         } catch (error) {
           console.log(error.message);
         }
-       
+
       });
 
 

@@ -5,7 +5,7 @@ const ConnectionRequest = require("../models/connectionRequest");
 const User = require("../models/user");
 
 
-const USER_SAFE_DATA = "firstName lastName photoUrl age gender about skills";
+const USER_SAFE_DATA = "firstName lastName photoUrl age gender about skills isPremium";
 
 // Get all the pending connection request for the loggedIn user
 userRouter.get("/user/requests/received", userAuth, async(req, res) => {
@@ -93,7 +93,7 @@ userRouter.get("/feed", userAuth, async(req, res) => {
                 {_id: {$ne: loggedInUser._id}}, // not want my own card also
             ]
         }).select(USER_SAFE_DATA).skip(skip).limit(limit);
-
+        // console.log("users data is: ", users);
         res.json({ data: users });
 
     } catch (error) {
