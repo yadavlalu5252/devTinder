@@ -77,7 +77,7 @@ const userSchema = new mongoose.Schema(
 
     photoUrl: {
       type: String,
-      // default: "https://uxwing.com/wp-content/themes/uxwing/download/peoples-avatars/no-profile-picture-icon.png",
+      default: "https://uxwing.com/wp-content/themes/uxwing/download/peoples-avatars/no-profile-picture-icon.png",
       validate(value){
         if(!validator.isURL(value)){
           throw new Error("Your Photo Url is not Correct"+ value)
